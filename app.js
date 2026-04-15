@@ -1,130 +1,95 @@
 "use strict";
-console.log("Movie App starter...");
-
-let movies = [
+const persons = [
   {
-    title: "Inception",
-    year: 2010,
-    rating: 8.8,
-    genre: "Action, Adventure, Sci-Fi",
+    id: "ZfPTVEMQKf9vhNiUh0bj",
     image:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
+      "https://www.baaa.dk/media/b5ahrlra/maria-louise-bendixen.jpg?anchor=center&mode=crop&width=800&height=450&rnd=132792921650330000&format=webp",
+    mail: "<a href=\"mailto:mlbe@eaaa.dk\">mlbe@eaaa.dk</a>",
+    name: "Maria Louise Bendixen",
+    title: "Senior Lecturer",
   },
   {
-    title: "The Matrix",
-    year: 1999,
-    rating: 8.7,
-    genre: "Action, Sci-Fi",
+    id: "fTs84KRoYw5pRZEWCq2Z",
     image:
-      "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+      "https://www.eaaa.dk/media/mfcpsgy1/rasmus-cederdorf.jpg?width=800&height=450&v=1db97e246f73210",
+    mail: "<a href=\"mailto:race@eaaa.dk\">race@eaaa.dk</a>",
+    name: "Rasmus Cederdorff",
+    title: "Senior Lecturer",
   },
   {
-    title: "Interstellar",
-    year: 2014,
-    rating: 8.6,
-    genre: "Adventure, Drama, Sci-Fi",
+    id: "gCs33KRoYg5pRZEWCq8J",
     image:
-      "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg",
+      "https://www.eaaa.dk/media/u4gorzsd/birgitte-kirk-iversen.jpg?width=800&height=450&v=1db9744144491d0",
+    mail: "<a href=\"mailto:bki@eaaa.dk\">bki@eaaa.dk</a>",
+    name: "Birgitte Kirk Iversen",
+    title: "Senior Lecturer",
   },
   {
-    title: "The Dark Knight",
-    year: 2008,
-    rating: 9.0,
-    genre: "Action, Crime, Drama",
+    id: "fjpRTRTjZHwrq3tTLHri",
     image:
-      "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg",
+      "https://www.baaa.dk/media/5buh1xeo/anne-kirketerp.jpg?anchor=center&mode=crop&width=800&height=450&rnd=132792921531600000&format=webp",
+    mail: "<a href=\"mailto:anki@eaaa.dk\">anki@eaaa.dk</a>",
+    name: "Anne Kirketerp",
+    title: "Head of Department",
   },
   {
-    title: "Unknown Identity",
-    year: 2011,
-    rating: 6.8,
-    genre: "Action, Mystery, Thriller",
-    image: "https://filmogtro.dk/uploads/pics/Unknown-Identity.jpg",
+    id: "pqzGY1MnHYm3I4Ca79Xn",
+    image:
+      "https://www.eaaa.dk/media/14qpfeq4/line-skjodt.jpg?width=800&height=450&rnd=133178433559770000",
+    mail: "<a href=\"mailto:lskj@eaaa.dk\">lskj@eaaa.dk</a>",
+    name: "Line Skjødt",
+    title: "Senior Lecturer & Internship Coordinator",
   },
   {
-    title: "Oppenheimer",
-    year: 2023,
-    rating: 8.2,
-    genre: "Biography, Drama, History",
+    id: "HlvRHr58C05guOLl64k5",
     image:
-      "https://theempiretheatre.com/uploads/2023/09/Empire-Movie-site-Oppenheimer.jpg",
+      "https://www.eaaa.dk/media/bdojel41/dan-okkels-brendstrup.jpg?anchor=center&mode=crop&width=800&height=450&rnd=132792921559630000&format=webp",
+    mail: "<a href=\"mailto:dob@eaaa.dk\">dob@eaaa.dk</a>",
+    name: "Dan Okkels Brendstrup",
+    title: "Senior Lecturer",
   },
   {
-    title: "Safe",
-    year: 2012,
-    rating: 6.5,
-    genre: "Action, Thriller",
+    id: "MlvJJr83C55auHLl64s7",
     image:
-      "https://m.media-amazon.com/images/M/MV5BMTcxNDI0NzUxMF5BMl5BanBnXkFtZTcwOTIzMjkyNw@@._V1_FMjpg_UX1000_.jpg",
+      "https://www.eaaa.dk/media/oayjq02h/martin-n%C3%B8hr.jpg?width=800&height=450&v=1da8a5a7a84e370",
+    mail: "<a href=\"mailto:mnor@eaaa.dk\">mnor@eaaa.dk</a>",
+    name: "Martin Aagaard Nøhr",
+    title: "Lecturer",
+  },
+  {
+    id: "NlvKKr84D66bvIMm75t8",
+    image:
+      "https://www.eaaa.dk/media/1yfflb3v/lars-boge-eskildsen.jpg?width=850&height=450&v=1dc16997f2dfd40",
+    mail: "<a href=\"mailto:laes@eaaa.dk\">laes@eaaa.dk</a>",
+    name: "Lars Bøge Eskildsen",
+    title: "Senior Lecturer",
   },
 ];
 
-const movieList = document.querySelector("#movie-list");
+const personList = document.querySelector("#person-list");
 
-showMovies();
+function showPersons() {
+  personList.innerHTML = "";
 
-function showMovies() {
-  movieList.innerHTML = "";
-
-  for (const movie of movies) {
-    showMovie(movie);
+  for (const person of persons) {
+    showPerson(person);
   }
 }
 
-function showMovie(movie) {
-  const highlightClass = movie.rating >= 8.5 ? "movie-card--highlight" : "";
+function showPerson(person) {
   const html = /* html */ `
-    <article class="movie-card ${highlightClass}">
-        <img class="movie-image" src="${movie.image}" alt="${movie.title}">
-      <div class="movie-info">
-        <h3>${movie.title}</h3>
-        <p>År: ${movie.year}</p>
-        <p>Rating: ${movie.rating}</p>
-        <p>Genre: ${movie.genre}</p>
+    <article class="person-card">
+        <img class="person-image" src="${person.image}" alt="${person.name}">
+      <div class="person-info">
+        <h3>${person.name}</h3>
+        <p>${person.title}</p>
+        <p>${person.mail}</p>
+        <p>${person.image}</p>
       </div>
     </article>
   `;
 
-  movieList.insertAdjacentHTML("beforeend", html);
+  personList.insertAdjacentHTML("beforeend", html);
 }
 
-start();
-
-async function start() {
-  console.log("Henter film data...");
-
-  const response = await fetch(
-    "https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json",
-  );
-  movies = await response.json();
-
-  console.log("Hentet", movies.length, "film!");
-  showMovies();
-}
-
-movies.push({
-  title: "Pulp Fiction",
-  year: 1994,
-  rating: 8.9,
-  genre: "Crime, Drama",
-  image:
-    "https://m.media-amazon.com/images/I/81UTs3sC5hL._AC_UF894,1000_QL80_.jpg",
-});
-
-showMovies();
-
-function addMovie(movie) {
-  movies.push(movie);
-  showMovies();
-}
-
-addMovie({
-  title: "Blade Runner 2049",
-  year: 2017,
-  rating: 8.0,
-  image:
-    "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg",
-  genre: "Sci-fi",
-});
-
-
+showPersons();
