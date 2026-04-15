@@ -1,7 +1,7 @@
 "use strict";
 console.log("Movie App starter...");
 
-const movies = [
+let movies = [
   {
     title: "Inception",
     year: 2010,
@@ -86,6 +86,20 @@ function showMovie(movie) {
   `;
 
   movieList.insertAdjacentHTML("beforeend", html);
+}
+
+start();
+
+async function start() {
+  console.log("Henter film data...");
+
+  const response = await fetch(
+    "https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json",
+  );
+  movies = await response.json();
+
+  console.log("Hentet", movies.length, "film!");
+  showMovies();
 }
 
 movies.push({
