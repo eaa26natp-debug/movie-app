@@ -1,69 +1,74 @@
 "use strict";
 console.log("Movie App starter...");
 
-let movies = [
-  {
-    title: "Inception",
-    year: 2010,
-    rating: 8.8,
-    genre: "Action, Adventure, Sci-Fi",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
-  },
-  {
-    title: "The Matrix",
-    year: 1999,
-    rating: 8.7,
-    genre: "Action, Sci-Fi",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-  },
-  {
-    title: "Interstellar",
-    year: 2014,
-    rating: 8.6,
-    genre: "Adventure, Drama, Sci-Fi",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg",
-  },
-  {
-    title: "The Dark Knight",
-    year: 2008,
-    rating: 9.0,
-    genre: "Action, Crime, Drama",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg",
-  },
-  {
-    title: "Unknown Identity",
-    year: 2011,
-    rating: 6.8,
-    genre: "Action, Mystery, Thriller",
-    image: "https://filmogtro.dk/uploads/pics/Unknown-Identity.jpg",
-  },
-  {
-    title: "Oppenheimer",
-    year: 2023,
-    rating: 8.2,
-    genre: "Biography, Drama, History",
-    image:
-      "https://theempiretheatre.com/uploads/2023/09/Empire-Movie-site-Oppenheimer.jpg",
-  },
-  {
-    title: "Safe",
-    year: 2012,
-    rating: 6.5,
-    genre: "Action, Thriller",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMTcxNDI0NzUxMF5BMl5BanBnXkFtZTcwOTIzMjkyNw@@._V1_FMjpg_UX1000_.jpg",
-  },
-];
+const MOVIES_URL = "https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json";
 
+let allMovies = [];
 const movieList = document.querySelector("#movie-list");
+const genreSelect = document.querySelector("#genre-select");
+const movieCount = document.querySelector("#movie-count");
 
-showMovies();
+fetchMovies();
 
-function showMovies() {
+async function fetchMovies() {
+  console.log("Henter film data...");
+
+  const response = await fetch(MOVIES_URL);
+  allMovies = await response.json();
+
+  console.log("Hentet", allMovies.length, "film!");
+  console.log("Første film:", allMovies[0]);
+  console.log("Alle film:", allMovies);
+
+  populateGenreSelect();
+  showMovies(allMovies);
+
+  genreSelect.addEventListener("change", applyGenreFilter);
+}
+
+function populateGenreSelect() {
+  const genres = new Set();
+
+  for (const movie of allMovies) {
+    for (const genre of movie.genre) {
+      genres.add(genre);
+    }
+  }
+
+  const sortedGenres = [...genres].sort((a, b) => a.localeCompare(b));
+
+  for (const genre of sortedGenres) {
+    genreSelect.insertAdjacentHTML(
+      "beforeend",
+      `<option value="${genre}">${genre}</option>`,
+    );
+  }
+}
+
+function applyGenreFilter() {
+  const selectedGenre = genreSelect.value;
+
+  console.log("Valgt genre:", selectedGenre);
+
+  if (selectedGenre === "all") {
+    showMovies(allMovies);
+    return;
+  }
+
+  const filteresMovies = allMovies.filter(function (movie) {
+    return movie.genre.includes(selectedGenre);
+  });
+
+  showMovies(filteresMovies);
+}
+
+
+function showMovies(movies) {
+
+  movieCount.textContent = `Viser ${movies.length} film`;
+}
+
+function showMovies(movies) {
   movieList.innerHTML = "";
 
   for (const movie of movies) {
@@ -77,8 +82,7 @@ function showMovie(movie) {
     <article class="movie-card ${highlightClass}">
         <img class="movie-image" src="${movie.image}" alt="${movie.title}">
       <div class="movie-info">
-        <h3>${movie.title}</h3>
-        <p>År: ${movie.year}</p>
+        <h3>${formatMovieTitle(movie.title, movie.year)}</h3>
         <p>Rating: ${movie.rating}</p>
         <p>Genre: ${movie.genre}</p>
       </div>
@@ -88,43 +92,6 @@ function showMovie(movie) {
   movieList.insertAdjacentHTML("beforeend", html);
 }
 
-start();
-
-async function start() {
-  console.log("Henter film data...");
-
-  const response = await fetch(
-    "https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json",
-  );
-  movies = await response.json();
-
-  console.log("Hentet", movies.length, "film!");
-  showMovies();
+function formatMovieTitle(title, year) {
+  return `${title} (${year})`;
 }
-
-movies.push({
-  title: "Pulp Fiction",
-  year: 1994,
-  rating: 8.9,
-  genre: "Crime, Drama",
-  image:
-    "https://m.media-amazon.com/images/I/81UTs3sC5hL._AC_UF894,1000_QL80_.jpg",
-});
-
-showMovies();
-
-function addMovie(movie) {
-  movies.push(movie);
-  showMovies();
-}
-
-addMovie({
-  title: "Blade Runner 2049",
-  year: 2017,
-  rating: 8.0,
-  image:
-    "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg",
-  genre: "Sci-fi",
-});
-
-
