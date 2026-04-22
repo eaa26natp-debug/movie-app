@@ -1,29 +1,23 @@
 "use strict";
-console.log("Movie App starter...");
 
-const MOVIES_URL = "https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json";
-
+const MOVIES_URL =
+  "https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json";
 let allMovies = [];
+
 const movieList = document.querySelector("#movie-list");
 const genreSelect = document.querySelector("#genre-select");
+const searchInput = document.querySelector("#search-input");
+const sortSelect = document.querySelector("#sort-select");
 const movieCount = document.querySelector("#movie-count");
 
 fetchMovies();
 
 async function fetchMovies() {
-  console.log("Henter film data...");
-
   const response = await fetch(MOVIES_URL);
   allMovies = await response.json();
 
-  console.log("Hentet", allMovies.length, "film!");
-  console.log("Første film:", allMovies[0]);
-  console.log("Alle film:", allMovies);
-
   populateGenreSelect();
-  showMovies(allMovies);
-
-  genreSelect.addEventListener("change", applyGenreFilter);
+  applyFiltersAndSort();
 }
 
 function populateGenreSelect() {
@@ -45,31 +39,45 @@ function populateGenreSelect() {
   }
 }
 
-function applyGenreFilter() {
+function applyFiltersAndSort() {
   const selectedGenre = genreSelect.value;
+  const searchValue = searchInput.value.trim().toLowerCase();
+  const sortOption = sortSelect.value;
 
-  console.log("Valgt genre:", selectedGenre);
+  let filteredMovies = allMovies.filter(function (movie) {
+    const matchesGenre =
+      selectedGenre === "all" || movie.genre.includes(selectedGenre);
+    const matchesSearch = movie.title.toLowerCase().includes(searchValue);
 
-  if (selectedGenre === "all") {
-    showMovies(allMovies);
-    return;
-  }
-
-  const filteresMovies = allMovies.filter(function (movie) {
-    return movie.genre.includes(selectedGenre);
+    return matchesGenre && matchesSearch;
   });
 
-  showMovies(filteresMovies);
-}
+  if (sortOption === "title") {
+    filteredMovies.sort(function (movieA, movieB) {
+      return movieA.title.localeCompare(movieB.title);
+    });
+  } else if (sortOption === "year") {
+    filteredMovies.sort(function (movieA, movieB) {
+      return movieB.year - movieA.year;
+    });
+  } else if (sortOption === "rating") {
+    filteredMovies.sort(function (movieA, movieB) {
+      return movieB.rating - movieA.rating;
+    });
+  }
 
-
-function showMovies(movies) {
-
-  movieCount.textContent = `Viser ${movies.length} film`;
+  showMovies(filteredMovies);
 }
 
 function showMovies(movies) {
   movieList.innerHTML = "";
+  movieCount.textContent = `Viser ${movies.length} ud af ${allMovies.length} film`;
+
+  if (movies.length === 0) {
+    movieList.innerHTML =
+      '<p class="empty">Ingen film matcher din søgning eller genre.</p>';
+    return;
+  }
 
   for (const movie of movies) {
     showMovie(movie);
@@ -77,21 +85,54 @@ function showMovies(movies) {
 }
 
 function showMovie(movie) {
-  const highlightClass = movie.rating >= 8.5 ? "movie-card--highlight" : "";
   const html = /* html */ `
-    <article class="movie-card ${highlightClass}">
-        <img class="movie-image" src="${movie.image}" alt="${movie.title}">
+    <article class="movie-card" tabindex="0">
+      <img src="${movie.image}" alt="Poster af ${movie.title}" class="movie-poster" />
       <div class="movie-info">
-        <h3>${formatMovieTitle(movie.title, movie.year)}</h3>
-        <p>Rating: ${movie.rating}</p>
-        <p>Genre: ${movie.genre}</p>
+        <div class="title-row">
+          <h2>${movie.title}</h2>
+          <span class="year-badge">(${movie.year})</span>
+        </div>
+        <p class="genre">${movie.genre.join(", ")}</p>
+        <p class="movie-rating">⭐ ${movie.rating}</p>
+        <p class="director-line"><strong>Instruktør:</strong> ${movie.director}</p>
       </div>
     </article>
   `;
 
   movieList.insertAdjacentHTML("beforeend", html);
+
+  const newCard = movieList.lastElementChild;
+  newCard.addEventListener("click", function () {
+    showMovieDialog(movie);
+  });
+
+  newCard.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      showMovieDialog(movie);
+    }
+  });
 }
 
-function formatMovieTitle(title, year) {
-  return `${title} (${year})`;
+function showMovieDialog(movie) {
+  const dialog = document.querySelector("#movie-dialog");
+  const dialogContent = document.querySelector("#dialog-content");
+
+  dialogContent.innerHTML = /* html */ `
+    <img src="${movie.image}" alt="Poster af ${movie.title}" class="movie-poster">
+    <div class="dialog-details">
+      <h2>${movie.title} <span class="movie-year">(${movie.year})</span></h2>
+      <p class="movie-genre">${movie.genre.join(", ")}</p>
+      <p class="movie-rating">⭐ ${movie.rating}</p>
+      <p><strong>Instruktør:</strong> ${movie.director}</p>
+      <p><strong>Skuespillere:</strong> ${movie.actors.join(", ")}</p>
+      <p class="movie-description">${movie.description}</p>
+    </div>
+  `;
+
+  dialog.showModal();
 }
+
+genreSelect.addEventListener("change", applyFiltersAndSort);
+searchInput.addEventListener("input", applyFiltersAndSort);
+sortSelect.addEventListener("change", applyFiltersAndSort);

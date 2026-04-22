@@ -6,7 +6,7 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0b35f0 0%, #0d034e 100%);
   min-height: 100vh;
   color: white;
 }
@@ -27,16 +27,14 @@ header p {
   opacity: 0.9;
 }
 
-
 main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-
 .counter-box {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(108, 199, 248, 0.1);
   backdrop-filter: blur(10px);
   padding: 3rem;
   border-radius: 20px;
@@ -125,21 +123,72 @@ button:active {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 3rem;
   }
-  
 }
 
 .movie-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 2rem;
-  transition: transform 0.3s;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, #3f6085 0%, #4776ac 100%);
+  border: 1px solid rgba(17, 148, 199, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(7, 160, 207, 0.3);
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
 }
 
 .movie-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(1, 2, 33, 0.45);
+  border-color: #69c8f0;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-badge {
+  border-radius: 999px;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.7rem;
+}
+
+.movie-rating {
+  margin-top: 0.45rem;
+  font-weight: 700;
+}
+
+.director-line {
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+#movie-dialog {
+  border-radius: 16px;
+  width: min(92vw, 920px);
+  background: #568ed8;
+}
+
+#dialog-content {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 2fr;
+  gap: 2rem;
+}
+
+.dialog-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dialog-description {
+  padding: 1rem;
+  border-left: 4px solid #69c8f0;
+  font-style: italic;
+  background: rgba(87, 181, 222, 0.08);
 }
 
 .movie-card h3 {
@@ -184,4 +233,91 @@ button:active {
   font-weight: bold;
   color: white;
   white-space: nowrap;
+}
+
+img {
+  width: 100%;
+}
+
+.controls {
+   max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.control-group input,
+.control-group select {
+  width: 100%;
+  margin: 12;
+  flex-direction: column;
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 2px solid white;
+  font-size: 1rem;
+}
+
+dialog#movie-dialog {
+  width: min(94vw, 900px);
+  padding: 0;
+  border-radius: 14px;
+}
+
+dialog#movie-dialog::backdrop {
+  background: rgba(12, 178, 200, 0.7);
+}
+
+#dialog-content {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+#close-dialog {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+}
+
+.dialog-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.movie-description {
+  padding: 0.9rem;
+  border-left: 4px solid #69c8f0;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 260px;
+}
+
+.control-group label {
+  font-weight: 600;
+}
+
+.status-bar {
+ margin: 0.08rem 0;
+ padding: 0.75rem;
+ text-align: center;
 }
